@@ -10,78 +10,11 @@ import 'dart:io';
 
 void main() {
   runApp(ChangeNotifierProvider(
-      create: (context) => ReceiveData(),
+    create: (context) => ReceiveData(),
     //  builder: (Context) => ReceiveData(),
-      child: const PageViewClass(),
+    child: const PageViewClass(),
   ));
 }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(debugShowCheckedModeBanner: false, home: HomePage());
-//   }
-// }
-//
-// class HomePage extends StatelessWidget {
-//   // const HomePage({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     var width = MediaQuery.of(context).size.width;
-//     return SafeArea(
-//       child: Scaffold(
-//           floatingActionButton: FloatingActionButton(
-//             child: Icon(
-//               Icons.add,
-//               size: 30,
-//             ),
-//             onPressed: () {
-//               print("Clicked");
-//             },
-//           ),
-//           backgroundColor: Colors.deepPurpleAccent,
-//           appBar: AppBar(
-//             title: const Text("This is a title"),
-//             centerTitle: true,
-//             leading: const Icon(Icons.menu, size: 30),
-//             actions: [
-//               IconButton(
-//                 icon: Icon(
-//                   Icons.add_circle_outline,
-//                   size: 30,
-//                 ),
-//                 onPressed: () {
-//                   print('e');
-//                 },
-//               )
-//             ],
-//           ),
-//           body: Row(
-//             children: [
-//               Expanded(
-//                   flex: 2,
-//                   child: Container(
-//                     color: Colors.yellowAccent,
-//                   )),
-//               Expanded(
-//                   flex: 1,
-//                   child: Container(
-//                     color: Colors.red,
-//                   )),
-//               Expanded(
-//                   flex: 2,
-//                   child: Container(
-//                     color: Colors.black,
-//                   )),
-//             ],
-//           )),
-//     );
-//   }
-// }
 
 class PageViewClass extends StatefulWidget {
   const PageViewClass({Key? key}) : super(key: key);
@@ -116,34 +49,55 @@ class _PageViewState extends State<PageViewClass> {
 
   @override
   Widget build(BuildContext context) {
-
     var providerData = Provider.of<ReceiveData>(context);
     print(providerData.image);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SafeArea(
-      child: Scaffold(
-          body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //Text("You clicked " + providerData.value.toString() + " times"),
+          child: Scaffold(
+              body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                    child: Text("Click me"),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.purpleAccent)),
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Container(
+                              height: 220,
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    leading: Icon(Icons.share),
+                                    title: Text('Share'),
+                                  ),
+                                  ListTile(
+                                    leading: Icon(Icons.copy),
+                                    title: Text('Copy Link'),
+                                  ),
+                                  ListTile(
+                                    leading: Icon(Icons.edit),
+                                    title: Text('Edit'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
 
-    //        providerData._image == null? Text("No image found"): Image.file(providerData._image),
-            providerData.image == null? Text("No image found"): Image.file(providerData.image as File),
-            ElevatedButton(
-              child: Text("Click me"),
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.purpleAccent)),
-              onPressed: () {
-                providerData.captureImage();
-              },
-            )
-          ],
-        ),
-      )),
-    ));
+                      //providerData.captureImage();
+                    },
+                  );
+                }),
+              ],
+            ),
+          )),
+        ));
   }
 
   Widget contactDetails(name, des) {
@@ -158,38 +112,19 @@ class _PageViewState extends State<PageViewClass> {
 }
 
 class ReceiveData extends ChangeNotifier {
-
-
   File? image;
 
   final _picker = ImagePicker();
   // Implementing the image picker
   Future captureImage() async {
-    final XFile? pickedImage = await _picker.pickImage(source: ImageSource.camera);
+    final XFile? pickedImage =
+        await _picker.pickImage(source: ImageSource.camera);
     if (pickedImage != null) {
       // setState(() {
-         image = File(pickedImage!.path);
+      image = File(pickedImage!.path);
       // });
       print(image);
       notifyListeners();
     }
   }
-
-
- // notifyListeners();
-
-//   XFile? _photo;
-// Future captureImage() async{
-//     try {
-//       final XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
-//      // if (image == null) return;
-//      // final imageTemperory = File(image.path);
-//       XFile? _photo = image;
-//      print(_photo);
-//     } on PlatformException catch (e) {
-//       print(" File not Picked ");
-//     }
-//   }
-
-
 }
