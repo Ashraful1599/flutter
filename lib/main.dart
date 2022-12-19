@@ -7,6 +7,7 @@ import 'package:flutterapp/page3.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:io';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -50,42 +51,30 @@ class _PageViewState extends State<PageViewClass> {
   @override
   Widget build(BuildContext context) {
     var providerData = Provider.of<ReceiveData>(context);
-    print(providerData.image);
+  //  print(providerData.image);
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SafeArea(
-          child: Scaffold(
-              body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Builder(builder: (context) {
-                  return ElevatedButton(
-                    child: Text("Click me"),
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.purpleAccent)),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text("Alert title"),
-                              content: Text("This is content"),
-                              actions: [
-                                ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("Ok"))
-                              ],
-                            );
-                          });
-
-                      //providerData.captureImage();
-                    },
-                  );
-                }),
-              ],
-            ),
-          )),
-        ));
+            child: Scaffold(
+          bottomNavigationBar: CurvedNavigationBar(
+            backgroundColor: Colors.blueAccent,
+            items: <Widget>[
+              Icon(Icons.add, size: 30),
+              Icon(Icons.list, size: 30),
+              Icon(Icons.compare_arrows, size: 30),
+            ],
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+          body: Container(
+              color: Colors.blueAccent,
+              child: pages[_currentIndex],
+          ),
+        )));
   }
 
   Widget contactDetails(name, des) {
