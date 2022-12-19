@@ -51,30 +51,32 @@ class _PageViewState extends State<PageViewClass> {
   @override
   Widget build(BuildContext context) {
     var providerData = Provider.of<ReceiveData>(context);
-  //  print(providerData.image);
+    //  print(providerData.image);
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SafeArea(
             child: Scaffold(
-          bottomNavigationBar: CurvedNavigationBar(
-            backgroundColor: Colors.blueAccent,
-            items: <Widget>[
-              Icon(Icons.add, size: 30),
-              Icon(Icons.list, size: 30),
-              Icon(Icons.compare_arrows, size: 30),
-            ],
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-          ),
-          body: Container(
-              color: Colors.blueAccent,
-              child: pages[_currentIndex],
-          ),
-        )));
+              body: Center(
+                child: Builder(builder: (BuildContext con){
+                  return ElevatedButton(
+                    child: Text("Open snackbar"),
+                    onPressed: (){
+                      ScaffoldMessenger.of(con).showSnackBar(SnackBar(
+                        content: const Text('snack'),
+                        duration: const Duration(seconds: 10),
+                        action: SnackBarAction(
+                          label: 'ACTION',
+                          onPressed: () { },
+                        ),
+                      ));
+                    },
+                  );
+                },)
+              ),
+
+        )
+        ));
   }
 
   Widget contactDetails(name, des) {
