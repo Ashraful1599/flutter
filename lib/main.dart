@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterapp/page1.dart';
 import 'package:flutterapp/page2.dart';
 import 'package:flutterapp/page3.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:async';
+import 'dart:io';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -115,7 +118,7 @@ class _PageViewState extends State<PageViewClass> {
   Widget build(BuildContext context) {
 
     var providerData = Provider.of<ReceiveData>(context);
-
+    print(providerData.image);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: SafeArea(
@@ -124,14 +127,17 @@ class _PageViewState extends State<PageViewClass> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("You clicked " + providerData.value.toString() + " times"),
+            //Text("You clicked " + providerData.value.toString() + " times"),
+
+    //        providerData._image == null? Text("No image found"): Image.file(providerData._image),
+            providerData.image == null? Text("No image found"): Image.file(providerData.image as File),
             ElevatedButton(
               child: Text("Click me"),
               style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(Colors.purpleAccent)),
               onPressed: () {
-                providerData.increase();
+                providerData.captureImage();
               },
             )
           ],
@@ -152,9 +158,38 @@ class _PageViewState extends State<PageViewClass> {
 }
 
 class ReceiveData extends ChangeNotifier {
-  int value = 0;
-  increase() {
-    value++;
-    notifyListeners();
+
+
+  File? image;
+
+  final _picker = ImagePicker();
+  // Implementing the image picker
+  Future captureImage() async {
+    final XFile? pickedImage = await _picker.pickImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      // setState(() {
+         image = File(pickedImage!.path);
+      // });
+      print(image);
+      notifyListeners();
+    }
   }
+
+
+ // notifyListeners();
+
+//   XFile? _photo;
+// Future captureImage() async{
+//     try {
+//       final XFile? image = await ImagePicker().pickImage(source: ImageSource.camera);
+//      // if (image == null) return;
+//      // final imageTemperory = File(image.path);
+//       XFile? _photo = image;
+//      print(_photo);
+//     } on PlatformException catch (e) {
+//       print(" File not Picked ");
+//     }
+//   }
+
+
 }
