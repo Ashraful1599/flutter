@@ -66,27 +66,15 @@ class _PageViewState extends State<PageViewClass> {
                         backgroundColor:
                             MaterialStateProperty.all(Colors.purpleAccent)),
                     onPressed: () {
-                      showModalBottomSheet(
+                      showDialog(
                           context: context,
                           builder: (context) {
-                            return Container(
-                              height: 220,
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    leading: Icon(Icons.share),
-                                    title: Text('Share'),
-                                  ),
-                                  ListTile(
-                                    leading: Icon(Icons.copy),
-                                    title: Text('Copy Link'),
-                                  ),
-                                  ListTile(
-                                    leading: Icon(Icons.edit),
-                                    title: Text('Edit'),
-                                  ),
-                                ],
-                              ),
+                            return AlertDialog(
+                              title: Text("Alert title"),
+                              content: Text("This is content"),
+                              actions: [
+                                ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("Ok"))
+                              ],
                             );
                           });
 
