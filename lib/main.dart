@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 void main() => runApp(
   MaterialApp(
@@ -49,6 +50,14 @@ class _MyAppState extends State<MyApp> {
     fToast.init(context);
   }
 
+  String selected = "Item 1";
+  var items = [
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,14 +67,32 @@ class _MyAppState extends State<MyApp> {
       body: Center(
         child: Column(
           children: [
-            SizedBox(
-              height: 24.0,
-            ),
-            ElevatedButton(
-              child: Text("Show Custom Toast"),
-              onPressed: () {
-                _showToast();
-              },
+              // DropdownButton(
+              //     value: selected,
+              //     icon: Icon(Icons.arrow_drop_down),
+              //     items: items.map((String item){
+              //       return DropdownMenuItem(child: Text(item),value: item,);
+              //     }).toList(),
+              //     onChanged: (String? val){
+              //       setState(() {
+              //         selected = val!;
+              //       });
+              //     })
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownSearch<int>(
+                    items: [1, 2, 3, 4, 5, 6, 7],
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(4)),
+                Expanded(
+                  child: DropdownSearch<int>.multiSelection(
+                    clearButtonProps: ClearButtonProps(isVisible: true),
+                    items: [1, 2, 3, 4, 5, 6, 7],
+                  ),
+                )
+              ],
             ),
           ],
         ),
