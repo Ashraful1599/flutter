@@ -1,21 +1,16 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutterapp/main.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-void main() => runApp(
-  MaterialApp(
-    home: MyApp(),
-  ),
-);
-
-class MyApp extends StatefulWidget {
+class ToastContext extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  _ToastContextState createState() => _ToastContextState();
 }
 
-
-class _MyAppState extends State<MyApp> {
-
+class _ToastContextState extends State<ToastContext> {
   late FToast fToast;
+
   Widget toast = Container(
     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
     decoration: BoxDecoration(
@@ -25,7 +20,7 @@ class _MyAppState extends State<MyApp> {
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.error),
+        Icon(Icons.check),
         SizedBox(
           width: 12.0,
         ),
@@ -37,16 +32,18 @@ class _MyAppState extends State<MyApp> {
   _showToast() {
     fToast.showToast(
       child: toast,
-      gravity: ToastGravity.CENTER,
+      gravity: ToastGravity.BOTTOM,
       toastDuration: Duration(seconds: 2),
     );
   }
+
+
 
   @override
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    fToast.init(globalKey.currentState!.context);
   }
 
   @override
